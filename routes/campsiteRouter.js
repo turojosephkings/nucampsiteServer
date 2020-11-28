@@ -8,7 +8,7 @@ campsiteRouter.route('/')
     Campsite.find()
     .then(campsites => {
         res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Content-Type', 'application/json');
         res.json(campsites);
     })
     .catch(err => next(err));
@@ -38,7 +38,6 @@ campsiteRouter.route('/')
 });
 
 campsiteRouter.route('/:campsiteId')
-
 .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
