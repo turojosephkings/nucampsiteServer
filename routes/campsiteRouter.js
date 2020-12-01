@@ -19,7 +19,7 @@ campsiteRouter.route('/')
         console.log('Campsite created ', campsite);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(campsite)
+        res.json(campsite);
     })
     .catch(err => next(err));
 })
@@ -97,7 +97,7 @@ campsiteRouter.route('/:campsiteId/comments')
             campsite.save()
             .then(campsite => {
                 res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json')
+                res.setHeader('Content-Type', 'application/json');
                 res.json(campsite);
             })
             .catch(err => next(err));
@@ -123,7 +123,7 @@ campsiteRouter.route('/:campsiteId/comments')
             campsite.save()
             .then(campsite => {
                 res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json')
+                res.setHeader('Content-Type', 'application/json');
                 res.json(campsite);
             })
             .catch(err => next(err));
@@ -143,7 +143,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     .then(campsite => {
         if(campsite && campsite.comments.id(req.params.commentId)) {
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json')
+            res.setHeader('Content-Type', 'application/json');
             res.json(campsite.comments.id(req.params.commentId));
         } else if (!campsite) {
             err = new Error(`Campsite ${req.params.campsiteId} not found!`);
