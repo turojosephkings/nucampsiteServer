@@ -171,19 +171,25 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if(campsite && campsite.comments.id(req.params.commentId)) {
-            if (req.body.rating) {
-                campsite.comments.id(req.params.commentId).rating = req.body.rating;
+            if (req.user._id.equals(campsite.comments.id(req.params.commentId).author)) {
+                if (req.body.rating) {
+                    campsite.comments.id(req.params.commentId).rating = req.body.rating;
+                }
+                if (req.body.text) {
+                    campsite.comments.id(req.params.commentId).text = req.body.text;
+                }
+                campsite.save()
+                .then(campsite => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(campsite);
+                })
+                .catch(err => next(err));
+            } else {
+                err = new Error(`You are not authorized to perform this operation!`);
+                err.status = 403;
+                return next(err);
             }
-            if (req.body.text) {
-                campsite.comments.id(req.params.commentId).text = req.body.text;
-            }
-            campsite.save()
-            .then(campsite => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(campsite);
-            })
-            .catch(err => next(err));
         } else if (!campsite) {
             err = new Error(`Campsite ${req.params.campsiteId} not found!`);
             err.status = 404;
@@ -200,14 +206,20 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if(campsite && campsite.comments.id(req.params.commentId)) {
-            campsite.comments.id(req.params.commentId).remove();
-            campsite.save()
-            .then(campsite => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(campsite);
-            })
-            .catch(err => next(err));
+            if (req.user._id.equals(campsite.comments.id(req.params.commentId).author)) {
+                campsite.comments.id(req.params.commentId).remove();
+                campsite.save()
+                .then(campsite => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(campsite);
+                })
+                .catch(err => next(err));
+            } else {
+                err = new Error(`You are not authorized to perform this operation!`);
+                err.status = 403;
+                return next(err);
+            }
         } else if (!campsite) {
             err = new Error(`Campsite ${req.params.campsiteId} not found!`);
             err.status = 404;
