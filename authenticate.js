@@ -12,7 +12,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 exports.getToken = user => {
-    return jwt.sign(user, config.secretKey, { expiresIn: 3600 });
+    return jwt.sign(user, config.secretKey, {expiresIn: 3600});
 };
 
 const opts = {};
@@ -37,7 +37,7 @@ exports.jwtPassport = passport.use(
     )
 );
 
-exports.verifyUser = passport.authenticate('jwt', { session: false })
+exports.verifyUser = passport.authenticate('jwt', {session: false});
 
 exports.verifyAdmin = (req, res, next) => {
     if (req.user.admin === false) {
